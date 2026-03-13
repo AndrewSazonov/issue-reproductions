@@ -57,7 +57,7 @@ jobs:
         run: pixi run python --version
 
       - name: Add scipp from PyPI
-        run: pixi add --pypi "${{ matrix.scipp }}"
+        run: pixi add --pypi "${{ matrix.scipp }}" -vvvv
 
       - name: Show installed scipp version
         run: pixi list scipp
