@@ -60,6 +60,9 @@ jobs:
           pixi run python --version
           pixi run pip --version
 
+      - name: Show pixi info
+        run: pixi info
+        
       - name: Add scipp from PyPI (via pip)
         run: pixi run pip install "${{ matrix.scipp }}"
 
