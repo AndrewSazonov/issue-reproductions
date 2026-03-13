@@ -50,6 +50,9 @@ jobs:
       - name: Show pixi version
         run: pixi --version
 
+      - name: Add lower bound macOS to be 14.0
+        run: pixi project system-requirements add macos 14.0
+
       - name: Add Python 3.13 and pip
         run: |
           pixi add python=3.13
@@ -62,7 +65,7 @@ jobs:
 
       - name: Show pixi info
         run: pixi info
-        
+
       - name: Add scipp from PyPI (via pip)
         run: pixi run pip install "${{ matrix.scipp }}"
 
