@@ -1,0 +1,66 @@
+name: scipp-pixi-macos-install
+
+on:
+  push:
+    paths:
+      - "cases/scipp-pixi-macos-install/**"
+      - ".github/workflows/scipp-pixi-macos-install.yml"
+  schedule:
+    - cron: '0 0 * * *' # daily, at 00:00.
+  workflow_dispatch:
+
+jobs:
+  try-install-scipp:
+    name: ${{ matrix.os }} | ${{ matrix.scipp }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macos-14
+          - macos-latest
+
+        scipp:
+          - "scipp==25.12.0"
+          - "scipp==26.1.0"
+          - "scipp"
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: cases/scipp-pixi-macos-install
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Install pixi
+        uses: prefix-dev/setup-pixi@v0.9.4
+        with:
+          run-install: false
+          cache: false
+          post-cleanup: false
+
+      - name: Initialize pixi
+        run: pixi init
+
+      - name: Show pixi version
+        run: pixi --version
+
+      - name: Add Python 3.13
+        run: pixi add python=3.13
+
+      - name: Show Python version
+        run: pixi run python --version
+
+      - name: Add scipp from PyPI
+        run: pixi add --pypi "${{ matrix.scipp }}"
+
+      - name: Show installed scipp version
+        run: pixi list scipp
+
+      - name: Show imported scipp version
+        run: pixi run python -c "import scipp; print('Scipp', scipp.__version__)"
