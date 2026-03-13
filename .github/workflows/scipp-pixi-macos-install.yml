@@ -50,13 +50,20 @@ jobs:
       - name: Show pixi version
         run: pixi --version
 
-      - name: Add Python 3.13
-        run: pixi add python=3.13
+      - name: Add Python 3.13 and pip
+        run: |
+          pixi add python=3.13
+          pixi add pip
 
-      - name: Show Python version
-        run: pixi run python --version
+      - name: Show Python and PIP version
+        run: |
+          pixi run python --version
+          pixi run pip --version
 
-      - name: Add scipp from PyPI
+      - name: Add scipp from PyPI (via pip)
+        run: pixi run pip install "${{ matrix.scipp }}"
+
+      - name: Add scipp from PyPI (via pixi)
         run: pixi add --pypi "${{ matrix.scipp }}" -vvvv
 
       - name: Show installed scipp version
